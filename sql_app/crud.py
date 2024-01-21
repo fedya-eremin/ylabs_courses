@@ -84,6 +84,7 @@ def create_submenu(db: Session, menu_id: int, submenu: schemas.CreateSubmenu):
     db.add(db_submenu)
     db.commit()
     db.refresh(db_submenu)
+    return db_submenu
 
 
 def update_submenu(

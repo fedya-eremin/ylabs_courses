@@ -1,20 +1,17 @@
-from fastapi import Depends, APIRouter, HTTPException
+from http import HTTPStatus
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from sql_app import crud, schemas
 from sql_app.database import get_db
-
-
-from http import HTTPStatus
-from uuid import UUID
-
 
 router = APIRouter()
 
 
 @router.get("/menus/{menu_id}", response_model=schemas.Menu)
 def read_menu(menu_id: UUID, db: Session = Depends(get_db)):
-    # TODO submenus count & dishes count
     db_menu = crud.get_menu(db, menu_id=menu_id)
     if db_menu is None:
         raise HTTPException(
@@ -29,7 +26,7 @@ def read_menu(menu_id: UUID, db: Session = Depends(get_db)):
 
 
 @router.get("/menus", response_model=list[schemas.Menu])
-def read_menus(db: Session = Depends(get_db)):
+def read_all_menus(db: Session = Depends(get_db)):
     menus = crud.get_all_menus(db)
     for row in menus:
         row.submenus_count = (

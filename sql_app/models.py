@@ -1,9 +1,9 @@
+import uuid
+
 from sqlalchemy import Column, Float, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 
 from sql_app.database import Base
-
-import uuid
 
 
 class Menu(Base):
