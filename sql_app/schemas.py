@@ -36,3 +36,4 @@ class Dish(CreateDish):
     class Config:
         from_attributes = True
     id: UUID
+    price: str

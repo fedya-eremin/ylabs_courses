@@ -107,21 +107,27 @@ def delete_submenu(db: Session, menu_id: int, submenu_id: int):
     db.commit()
 
 
-def get_dish(db: Session, menu_id: int, submenu_id: int, dish_id: int):
-    return (
+def get_dish(db: Session, submenu_id: int, dish_id: int):
+    db_dish = (
         db.query(models.Dish)
         .filter(models.Dish.submenu_id == submenu_id)
         .filter(models.Dish.id == dish_id)
         .first()
     )
+    if db_dish is not None:
+        db_dish.price = str(db_dish.price)
+    return db_dish
 
 
 def get_all_dishes(db: Session, submenu_id: int):
-    return (
+    db_dishes = (
         db.query(models.Dish)
         .filter(models.Dish.submenu_id == submenu_id)
         .all()
     )
+    for dish in db_dishes:
+        dish.price = str(dish.price)
+    return db_dishes
 
 
 def create_dish(db: Session, submenu_id: int, dish: schemas.CreateDish):
@@ -130,6 +136,8 @@ def create_dish(db: Session, submenu_id: int, dish: schemas.CreateDish):
     db.add(db_dish)
     db.commit()
     db.refresh(db_dish)
+    db_dish.price = str(db_dish.price)
+    return db_dish
 
 
 def update_dish(
@@ -144,6 +152,8 @@ def update_dish(
     db_dish.price = dish.price
     db.commit()
     db.refresh(db_dish)
+    if db_dish is not None:
+        db_dish.price = str(db_dish.price)
     return db_dish
 
 
